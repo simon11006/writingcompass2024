@@ -162,13 +162,14 @@ export default async function handler(req, res) {
 - 총 문단 수: ${paragraphs.length}개
 - 평균 문장 길이: ${Math.round((content.replace(/\n/g, '').length) / (content.match(/[^.!?]+[.!?]+/g)?.length || 1))}자`
         }],
-       temperature: 0.25,
+        temperature: 0.25,
         max_tokens: 10000
       })
     });
 
     if (!response.ok) {
-      throw new Error('OpenAI API request failed');
+      const errorData = await response.json();
+      throw new Error(`API 요청 실패: ${errorData.error?.message || '알 수 없는 오류'}`);
     }
 
     const data = await response.json();
@@ -176,6 +177,10 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'Analysis failed', message: error.message });
+    res.status(500).json({
+      error: 'Analysis failed',
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 }
