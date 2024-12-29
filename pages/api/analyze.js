@@ -1,10 +1,10 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
+    return res.status(405).json({ message: 'Only POST method allowed' });
   }
 
   const { title, content, grade, class: classNum, number, name } = req.body;
-  
+
   // 문단별로 나누고 번호 매기기
   const paragraphs = content.split(/\n+/).filter(p => p.trim());
   const numberedParagraphs = paragraphs.map((p, index) => `[${index + 1}문단]\n${p}`).join('\n\n');
@@ -162,34 +162,20 @@ export default async function handler(req, res) {
 - 총 문단 수: ${paragraphs.length}개
 - 평균 문장 길이: ${Math.round((content.replace(/\n/g, '').length) / (content.match(/[^.!?]+[.!?]+/g)?.length || 1))}자`
         }],
-        temperature: 0.25,
+       temperature: 0.25,
         max_tokens: 10000
       })
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('OpenAI API 오류:', errorData);
-      throw new Error(`API 요청 실패: ${errorData.error?.message || '알 수 없는 오류'}`);
+      throw new Error('OpenAI API request failed');
     }
 
     const data = await response.json();
-    
-    // 응답 데이터 검증
-    if (!data.choices?.[0]?.message?.content) {
-      console.error('잘못된 API 응답 형식:', data);
-      throw new Error('API 응답 형식이 올바르지 않습니다');
-    }
-
-    // 성공적인 응답 반환
     res.status(200).json(data);
 
   } catch (error) {
-    console.error('서버 오류:', error);
-    res.status(500).json({
-      error: 'Analysis failed',
-      message: error.message || '분석 중 오류가 발생했습니다',
-      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
-    });
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Analysis failed', message: error.message });
   }
 }
