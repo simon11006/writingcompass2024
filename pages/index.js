@@ -600,20 +600,20 @@ function generateAnalysisHTML(data) {
           <div class="flex flex-col flex-1 gap-6">
             <!-- 평가 항목 그리드 -->
             <div class="grid grid-cols-2 gap-4">
-              ${Object.entries(categories).map(([category, description]) => {
-                const data = scores[category];
-                return `
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-between gap-4">
-                    <div>
-                      <div class="text-lg font-medium text-gray-900">${category}</div>
-                      <div class="text-sm text-gray-500">${description}</div>
-                    </div>
-                    <div class="grade-badge ${getGradeStyle(data.grade)}">
-                      ${data.grade}
-                    </div>
-                  </div>
-                `;
-              }).join('')}
+             ${Object.entries(data.categories).map(([categoryName, description]) => {
+  const categoryData = data.scores[categoryName];
+  return `
+    <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-between gap-4">
+      <div>
+        <div class="text-lg font-medium text-gray-900">${categoryName}</div>
+        <div class="text-sm text-gray-500">${description}</div>
+      </div>
+      <div class="grade-badge ${getGradeStyle(categoryData.grade)}">
+        ${categoryData.grade}
+      </div>
+    </div>
+  `;
+}).join('')}
             </div>
 
             <!-- 통계 정보 -->
