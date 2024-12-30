@@ -8,4 +8,5 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  important: true // 이 부분 추가
 }
