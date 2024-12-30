@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import Head from 'next/head';
-import '../styles/globals.css'; 
+import Head from 'next/head'
+import { useState, useEffect } from 'react'
+import '../styles/globals.css'  // 이 줄을 맨 위로 이동
 
 // 상수 정의
 const CATEGORIES = {
@@ -470,6 +470,19 @@ export default function Home() {
       '<span>문단 미리보기 닫기</span><span class="button-icon">👁️</span>';
   };
 
+  Copyconst validateScores = (scores, paragraphCount) => {
+  if (paragraphCount <= 1) {
+    // 한 문단일 경우 점수를 강제로 조정
+    if (['A+', 'A', 'B+', 'B', 'C+', 'C', 'D+'].includes(scores['구조성'].grade)) {
+      scores['구조성'].grade = 'D';
+    }
+    if (['A+', 'A', 'B+', 'B'].includes(scores['완성도'].grade)) {
+      scores['완성도'].grade = 'C';
+    }
+  }
+  return scores;
+};
+  
   // 문단 미리보기 토글
   const toggleParagraphPreview = () => {
     const previewContent = document.getElementById('previewContent');
@@ -533,8 +546,8 @@ export default function Home() {
 
       // scores 객체 생성
       const scores = {};
-      Object.keys(CATEGORIES).forEach(category => {
-        scores[category] = extractCategoryData(analysisContent, category);
+      Object.keys(CATEGORIES).forEach( => {
+        scores[] = extractData(analysisContent, );
       });
 
       // 점수 검증 및 계산
@@ -612,12 +625,12 @@ export default function Home() {
               <div class="flex flex-col flex-1 gap-6">
                 <!-- 평가 항목 그리드 -->
                 <div class="grid grid-cols-2 gap-4">
-                  ${Object.entries(CATEGORIES).map(([category, description]) => {
-                    const data = scores[category];
+                  ${Object.entries(CATEGORIES).map(([, description]) => {
+                    const data = scores[];
                     return `
                       <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-between gap-4">
                         <div>
-                          <div class="text-lg font-medium text-gray-900">${category}</div>
+                          <div class="text-lg font-medium text-gray-900">${}</div>
                           <div class="text-sm text-gray-500">${description}</div>
                         </div>
                         <div class="grade-badge ${getGradeStyle(data.grade)}">
@@ -652,13 +665,13 @@ export default function Home() {
           </div>
 <!-- 영역별 분석 -->
           <h2 class="section-title">영역별 분석</h2>
-          <div class="category-grid">
-            ${Object.entries(scores).map(([category, data]) => `
-              <div class="analysis-category-section">
-                <div class="category-header">
-                  <div class="category-title-wrap">
-                    <div class="category-name">${category}</div>
-                    <div class="category-subtitle">${CATEGORIES[category]}</div>
+          <div class="-grid">
+            ${Object.entries(scores).map(([, data]) => `
+              <div class="analysis--section">
+                <div class="-header">
+                  <div class="-title-wrap">
+                    <div class="-name">${}</div>
+                    <div class="-subtitle">${CATEGORIES[category]}</div>
                   </div>
                   <div class="category-grade ${getGradeStyle(data.grade)}">
                     ${data.grade}
