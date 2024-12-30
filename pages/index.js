@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import '../styles/globals.css'; 
 
 // 상수 정의
 const CATEGORIES = {
